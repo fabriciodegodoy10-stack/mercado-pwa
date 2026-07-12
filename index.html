@@ -150,16 +150,14 @@
         <img src="./icon-192.png" alt="">
       </div>
       <h1>Lista de Mercado</h1>
-      <p id="statusText">Instale este app na tela inicial para usar com o ícone correto.</p>
+      <p id="statusText">Instale este app na tela inicial. Quando abrir pelo ícone, sua lista entra automaticamente.</p>
       <div class="progress" aria-hidden="true"></div>
       <button class="open-button" id="openAppButton" type="button">Abrir aplicativo</button>
-      <div class="hint" id="hint">No Chrome, toque nos três pontinhos e escolha Instalar aplicativo ou Adicionar à tela inicial.</div>
+      <div class="hint" id="hint">No Chrome, toque nos três pontinhos e escolha Instalar aplicativo.</div>
     </main>
 
     <script>
       const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYuO0Bz5ckQYw9YDTNKUo4PaBv0TOjxfbaB3ROCIXChKh29J7XlT-3eVqTNdxLJZXoLQ/exec';
-      const REDIRECT_DELAY_MS = 900;
-
       const openButton = document.getElementById('openAppButton');
       const hint = document.getElementById('hint');
       const statusText = document.getElementById('statusText');
@@ -171,7 +169,7 @@
           return;
         }
 
-        window.location.href = APPS_SCRIPT_URL;
+        window.location.replace(APPS_SCRIPT_URL);
       }
 
       openButton.addEventListener('click', openAppsScript);
@@ -186,8 +184,8 @@
 
       if (isStandalone) {
         statusText.textContent = 'Abrindo sua lista compartilhada...';
-        hint.textContent = 'Se nada acontecer, toque no botão acima.';
-        window.setTimeout(openAppsScript, REDIRECT_DELAY_MS);
+        hint.textContent = 'Se nada acontecer, toque em Abrir aplicativo.';
+        window.setTimeout(openAppsScript, 150);
       }
     </script>
   </body>
