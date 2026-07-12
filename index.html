@@ -150,10 +150,10 @@
         <img src="./icon-192.png" alt="">
       </div>
       <h1>Lista de Mercado</h1>
-      <p>Abrindo sua lista compartilhada...</p>
+      <p id="statusText">Instale este app na tela inicial para usar com o ícone correto.</p>
       <div class="progress" aria-hidden="true"></div>
       <button class="open-button" id="openAppButton" type="button">Abrir aplicativo</button>
-      <div class="hint" id="hint">Se nada acontecer, toque no botão acima.</div>
+      <div class="hint" id="hint">No Chrome, toque nos três pontinhos e escolha Instalar aplicativo ou Adicionar à tela inicial.</div>
     </main>
 
     <script>
@@ -162,6 +162,8 @@
 
       const openButton = document.getElementById('openAppButton');
       const hint = document.getElementById('hint');
+      const statusText = document.getElementById('statusText');
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
       function openAppsScript() {
         if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'COLOCAREI_AQUI_O_LINK_DO_APPS_SCRIPT') {
@@ -182,7 +184,11 @@
         });
       }
 
-      window.setTimeout(openAppsScript, REDIRECT_DELAY_MS);
+      if (isStandalone) {
+        statusText.textContent = 'Abrindo sua lista compartilhada...';
+        hint.textContent = 'Se nada acontecer, toque no botão acima.';
+        window.setTimeout(openAppsScript, REDIRECT_DELAY_MS);
+      }
     </script>
   </body>
 </html>
