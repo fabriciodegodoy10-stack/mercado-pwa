@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#EC407A">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Lista Mercado">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Lista de Mercado</title>
+    <link rel="manifest" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/icon-192.png">
+    <link rel="shortcut icon" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/icon-192.png">
+    <?!= include('Style'); ?>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Lista compartilhada</p>
+          <h1>Lista de Mercado</h1>
+          <p class="created-at" id="createdAt">Criada em --</p>
+        </div>
+        <button class="primary-button" id="addItemButton" type="button">
+          <span aria-hidden="true">+</span>
+          Adicionar item
+        </button>
+      </header>
+
+      <main>
+        <section class="summary-bar" aria-live="polite">
+          <div>
+            <span class="summary-label">Pendentes</span>
+            <strong id="pendingCount">0</strong>
+          </div>
+          <div>
+            <span class="summary-label">Total</span>
+            <strong id="totalCount">0</strong>
+          </div>
+          <button class="close-button" id="closePurchaseButton" type="button">Encerrar compra</button>
+        </section>
+
+        <section class="filters" aria-label="Filtros">
+          <button class="filter-button active" type="button" data-filter="all">Todos</button>
+          <button class="filter-button" type="button" data-filter="pending">Pendentes</button>
+          <button class="filter-button" type="button" data-filter="bought">Comprados</button>
+        </section>
+
+        <section class="sector-nav" id="sectorNav" aria-label="Setores"></section>
+
+        <section class="status-message" id="statusMessage" role="status" aria-live="polite"></section>
+
+        <section class="list-area" id="listArea" aria-live="polite">
+          <div class="empty-state" id="emptyState">
+            <strong>Lista vazia</strong>
+            <span>Adicione o primeiro item para começar.</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="itemModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+          <h2 id="modalTitle">Adicionar item</h2>
+          <button class="icon-button" id="closeModalButton" type="button" aria-label="Fechar">×</button>
+        </div>
+
+        <form id="itemForm">
+          <input type="hidden" id="itemId">
+
+          <label for="description">Descrição do item</label>
+          <input id="description" name="description" type="text" autocomplete="off" required maxlength="80">
+
+          <div class="form-grid">
+            <div>
+              <label for="quantity">Quantidade</label>
+              <select id="quantity" name="quantity" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="unit">Unidade</label>
+              <select id="unit" name="unit" required>
+                <option value="Unidade">Unidade</option>
+                <option value="Dúzia">Dúzia</option>
+                <option value="Kg">Kg</option>
+                <option value="Grama">Grama</option>
+                <option value="Litro">Litro</option>
+                <option value="Mililitro">Mililitro</option>
+                <option value="Pacote">Pacote</option>
+                <option value="Caixa">Caixa</option>
+                <option value="Lata">Lata</option>
+                <option value="Garrafa">Garrafa</option>
+                <option value="Pote">Pote</option>
+                <option value="Bandeja">Bandeja</option>
+                <option value="Saco">Saco</option>
+                <option value="Maço">Maço</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid two-columns">
+            <div>
+              <label for="sector">Setor</label>
+              <select id="sector" name="sector" required></select>
+            </div>
+
+            <div>
+              <label for="includedBy">Incluído por</label>
+              <select id="includedBy" name="includedBy" required>
+                <option value="Fabrício">Fabrício</option>
+                <option value="Amanda">Amanda</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="secondary-button" id="cancelButton" type="button">Cancelar</button>
+            <button class="primary-button full" id="saveButton" type="submit">Salvar item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="loading-cover" id="loadingCover">
+      <div class="loader"></div>
+      <span>Carregando lista...</span>
+    </div>
+
+    <?!= include('Script'); ?>
+  </body>
+</html>
