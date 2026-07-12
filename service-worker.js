@@ -1,5 +1,4 @@
-const CACHE_NAME = 'mercado-pwa-v1';
-
+const CACHE_NAME = 'mercado-pwa-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -32,14 +31,16 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') {
+  const request = event.request;
+
+  if (request.method !== 'GET') {
     return;
   }
 
   event.respondWith(
     caches
-      .match(event.request)
-      .then(cached => cached || fetch(event.request))
+      .match(request)
+      .then(cached => cached || fetch(request))
       .catch(() => caches.match('./index.html'))
   );
 });
