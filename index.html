@@ -1,145 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <base target="_top">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#EC407A">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Lista Mercado">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="description" content="Inicializador PWA da Lista de Mercado compartilhada.">
     <title>Lista de Mercado</title>
-    <link rel="manifest" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/manifest.webmanifest">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/icon-192.png">
-    <link rel="shortcut icon" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/icon-192.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="https://fabriciodegodoy10-stack.github.io/mercado-pwa/icon-192.png">
-    <?!= include('Style'); ?>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png">
+    <style>
+      :root {
+        --bg: #FFF9F7;
+        --text: #1F2937;
+        --muted: #64748B;
+        --pink: #EC407A;
+        --pink-soft: #FCE4EC;
+        --blue: #4A90E2;
+        --blue-soft: #EAF3FF;
+        --yellow: #F9B934;
+        --yellow-soft: #FFF6D8;
+        --line: #E2E8F0;
+        --shadow: 0 22px 52px rgba(31, 41, 55, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 22px;
+        background:
+          radial-gradient(circle at 20% 18%, var(--pink-soft) 0 88px, transparent 90px),
+          radial-gradient(circle at 82% 16%, var(--blue-soft) 0 96px, transparent 98px),
+          radial-gradient(circle at 78% 82%, var(--yellow-soft) 0 116px, transparent 118px),
+          var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .launcher {
+        width: min(430px, 100%);
+        padding: 28px;
+        border: 1px solid rgba(226, 232, 240, 0.92);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.84);
+        box-shadow: var(--shadow);
+        text-align: center;
+        backdrop-filter: blur(12px);
+      }
+
+      .icon-wrap {
+        width: 112px;
+        height: 112px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 18px;
+        border-radius: 30px;
+        background: #ffffff;
+        box-shadow: 0 14px 28px rgba(236, 64, 122, 0.18);
+      }
+
+      .icon-wrap img {
+        width: 88px;
+        height: 88px;
+        display: block;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 7vw, 2.35rem);
+        line-height: 1.04;
+      }
+
+      p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .progress {
+        position: relative;
+        height: 10px;
+        margin: 24px 0 18px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: var(--blue-soft);
+      }
+
+      .progress::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 42%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--pink), var(--yellow));
+        animation: loading 1.15s ease-in-out infinite;
+      }
+
+      .open-button {
+        width: 100%;
+        min-height: 50px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--pink);
+        color: #ffffff;
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 12px 22px rgba(236, 64, 122, 0.22);
+      }
+
+      .hint {
+        min-height: 20px;
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      @keyframes loading {
+        0% {
+          transform: translateX(-110%);
+        }
+
+        100% {
+          transform: translateX(250%);
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Lista compartilhada</p>
-          <h1>Lista de Mercado</h1>
-          <p class="created-at" id="createdAt">Criada em --</p>
-        </div>
-        <button class="primary-button" id="addItemButton" type="button">
-          <span aria-hidden="true">+</span>
-          Adicionar item
-        </button>
-      </header>
-
-      <main>
-        <section class="summary-bar" aria-live="polite">
-          <div>
-            <span class="summary-label">Pendentes</span>
-            <strong id="pendingCount">0</strong>
-          </div>
-          <div>
-            <span class="summary-label">Total</span>
-            <strong id="totalCount">0</strong>
-          </div>
-          <button class="close-button" id="closePurchaseButton" type="button">Encerrar compra</button>
-        </section>
-
-        <section class="filters" aria-label="Filtros">
-          <button class="filter-button active" type="button" data-filter="all">Todos</button>
-          <button class="filter-button" type="button" data-filter="pending">Pendentes</button>
-          <button class="filter-button" type="button" data-filter="bought">Comprados</button>
-        </section>
-
-        <section class="sector-nav" id="sectorNav" aria-label="Setores"></section>
-
-        <section class="status-message" id="statusMessage" role="status" aria-live="polite"></section>
-
-        <section class="list-area" id="listArea" aria-live="polite">
-          <div class="empty-state" id="emptyState">
-            <strong>Lista vazia</strong>
-            <span>Adicione o primeiro item para começar.</span>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <div class="modal-backdrop" id="itemModal" aria-hidden="true">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-header">
-          <h2 id="modalTitle">Adicionar item</h2>
-          <button class="icon-button" id="closeModalButton" type="button" aria-label="Fechar">×</button>
-        </div>
-
-        <form id="itemForm">
-          <input type="hidden" id="itemId">
-
-          <label for="description">Descrição do item</label>
-          <input id="description" name="description" type="text" autocomplete="off" required maxlength="80">
-
-          <div class="form-grid">
-            <div>
-              <label for="quantity">Quantidade</label>
-              <select id="quantity" name="quantity" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="unit">Unidade</label>
-              <select id="unit" name="unit" required>
-                <option value="Unidade">Unidade</option>
-                <option value="Dúzia">Dúzia</option>
-                <option value="Kg">Kg</option>
-                <option value="Grama">Grama</option>
-                <option value="Litro">Litro</option>
-                <option value="Mililitro">Mililitro</option>
-                <option value="Pacote">Pacote</option>
-                <option value="Caixa">Caixa</option>
-                <option value="Lata">Lata</option>
-                <option value="Garrafa">Garrafa</option>
-                <option value="Pote">Pote</option>
-                <option value="Bandeja">Bandeja</option>
-                <option value="Saco">Saco</option>
-                <option value="Maço">Maço</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-grid two-columns">
-            <div>
-              <label for="sector">Setor</label>
-              <select id="sector" name="sector" required></select>
-            </div>
-
-            <div>
-              <label for="includedBy">Incluído por</label>
-              <select id="includedBy" name="includedBy" required>
-                <option value="Fabrício">Fabrício</option>
-                <option value="Amanda">Amanda</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button class="secondary-button" id="cancelButton" type="button">Cancelar</button>
-            <button class="primary-button full" id="saveButton" type="submit">Salvar item</button>
-          </div>
-        </form>
+    <main class="launcher">
+      <div class="icon-wrap" aria-hidden="true">
+        <img src="./icon-192.png" alt="">
       </div>
-    </div>
+      <h1>Lista de Mercado</h1>
+      <p>Abrindo sua lista compartilhada...</p>
+      <div class="progress" aria-hidden="true"></div>
+      <button class="open-button" id="openAppButton" type="button">Abrir aplicativo</button>
+      <div class="hint" id="hint">Se nada acontecer, toque no botão acima.</div>
+    </main>
 
-    <div class="loading-cover" id="loadingCover">
-      <div class="loader"></div>
-      <span>Carregando lista...</span>
-    </div>
+    <script>
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYuO0Bz5ckQYw9YDTNKUo4PaBv0TOjxfbaB3ROCIXChKh29J7XlT-3eVqTNdxLJZXoLQ/exec';
+      const REDIRECT_DELAY_MS = 900;
 
-    <?!= include('Script'); ?>
+      const openButton = document.getElementById('openAppButton');
+      const hint = document.getElementById('hint');
+
+      function openAppsScript() {
+        if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'COLOCAREI_AQUI_O_LINK_DO_APPS_SCRIPT') {
+          hint.textContent = 'Cole a URL do Apps Script no arquivo index.html antes de publicar.';
+          return;
+        }
+
+        window.location.href = APPS_SCRIPT_URL;
+      }
+
+      openButton.addEventListener('click', openAppsScript);
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker.js').catch(error => {
+            console.warn('Service worker nao registrado:', error);
+          });
+        });
+      }
+
+      window.setTimeout(openAppsScript, REDIRECT_DELAY_MS);
+    </script>
   </body>
 </html>
